@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ideas', function (Blueprint $table) {
+        Schema::create('tournament_winners', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tournament_id')->nullable()->constrained();
-            $table->string('name');
-            $table->string('email');
-            $table->text('idea');
+            $table->foreignId('tournament_id')->constrained();
+            $table->foreignId('idea_id')->constrained();
+            $table->enum('phase', ['first', 'second', 'final'])->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ideas');
+        Schema::dropIfExists('tournament_winners');
     }
 };

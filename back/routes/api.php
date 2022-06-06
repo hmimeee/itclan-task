@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\TournamentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', fn (Request $request) => $request->user());
-    Route::apiResource('ideas', IdeaController::class);
+
+    Route::apiResource('ideas', IdeaController::class)->only('index', 'store');
+
+    Route::get('tournaments', [TournamentController::class, 'index']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

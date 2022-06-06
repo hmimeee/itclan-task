@@ -56,7 +56,8 @@ class AuthController extends Controller
         $token =  $user->createToken($user->email)->plainTextToken;
 
         return $this->apiResponse('Registration successfull', 200, [
-            'token' => $token
+            'token' => $token,
+            'user' => $user
         ]);
     }
 }

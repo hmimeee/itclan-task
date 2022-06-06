@@ -104,10 +104,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="f-500 c-cyan">4555</td>
-                    <td>Samsung Galaxy Mega</td>
-                    <td class="f-500 c-cyan">$921</td>
+                  <tr v-for="tournament in tournaments" v-bind:key="tournament.id">
+                    <td class="f-500 c-cyan">{{tournament.id}}</td>
+                    <td>{{tournament.name}}</td>
+                    <td class="f-500 c-cyan">{{tournament.status}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -123,14 +123,19 @@
 import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import useIdeas from "@/composable/ideas";
+import useTournaments from "../composable/tournament";
 
 export default {
   setup() {
     const vuexStore = useStore();
     const user = computed(() => vuexStore.getters["auth/user"]);
     const ideas = computed(() => vuexStore.getters["idea/ideas"]);
+    const tournaments = computed(
+      () => vuexStore.getters["tournament/tournaments"]
+    );
     const ideaData = ref({});
     const { storeIdea, getIdeas } = useIdeas();
+    const { getTournaments } = useTournaments();
 
     const submitIdea = async () => {
       await storeIdea(ideaData.value);
@@ -140,13 +145,15 @@ export default {
 
     onMounted(async () => {
       await getIdeas();
+      await getTournaments();
     });
 
     return {
       user,
       ideaData,
       submitIdea,
-      ideas
+      ideas,
+      tournaments
     };
   },
 };

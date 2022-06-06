@@ -12,6 +12,7 @@
               type="text"
               class="form-control"
               placeholder="Name"
+              v-model="regData.name"
             />
           </div>
         </div>
@@ -26,6 +27,7 @@
               type="text"
               class="form-control"
               placeholder="Email"
+              v-model="regData.email"
             />
           </div>
         </div>
@@ -40,26 +42,49 @@
               type="password"
               class="form-control"
               placeholder="Password"
+              v-model="regData.password"
             />
           </div>
         </div>
-        <button class="btn btn-login btn-success btn-float">
+        <button @click="attemptRegister()" class="btn btn-login btn-success btn-float">
           <i class="notika-icon notika-right-arrow right-arrow-ant"></i>
         </button>
       </div>
 
       <div class="nk-navigation nk-lg-ic">
-        <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-register"
-          ><i class="notika-icon notika-right-arrow"></i>
-          <span>Login</span></a
-        >
-        <a
-          href="#"
+        <router-link
+          :to="'/login'"
           data-ma-action="nk-login-switch"
-          data-ma-block="#l-forget-password"
-          ><i>?</i> <span>Forgot Password</span></a
-        >
+          data-ma-block="#l-register"
+          ><i class="notika-icon notika-right-arrow"></i>
+          <span>Login</span>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { ref } from "vue";
+import useAuthentication from "@/composable/auth";
+
+export default {
+  setup() {
+    const regData = ref({
+      name: null,
+      email: null,
+      password: null,
+    });
+    const { register } = useAuthentication();
+
+    const attemptRegister = async () => {
+      await register(regData.value);
+    };
+
+    return {
+      regData,
+      attemptRegister,
+    };
+  },
+};
+</script>

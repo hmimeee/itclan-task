@@ -9,12 +9,27 @@ export default function useAuthentication() {
   const login = async (data) => {
     let res = await http.post("login", data);
 
-    if (res) {
+    if (res.token) {
       await vuexStore.dispatch("auth/storeToken", res.token);
 
       await vuexStore.dispatch("auth/setUser", res.user);
 
       router.push({ name: "dashboard" });
+    } else {
+      alert(res.message);
+    }
+    return false;
+  };
+
+  const register = async (data) => {
+    let res = await http.post("register", data);
+
+    if (res.token) {
+      await vuexStore.dispatch("auth/storeToken", res.token);
+
+      await vuexStore.dispatch("auth/setUser", res.user);
+
+      router.push({ name: "login" });
     } else {
       alert(res.message);
     }
@@ -36,5 +51,6 @@ export default function useAuthentication() {
     login,
     logout,
     authCheck,
+    register,
   };
 }

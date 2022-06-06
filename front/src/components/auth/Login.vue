@@ -37,16 +37,14 @@
       </div>
 
       <div class="nk-navigation nk-lg-ic">
-        <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-register"
-          ><i class="notika-icon notika-plus-symbol"></i>
-          <span>Register</span></a
-        >
-        <a
-          href="#"
+        <router-link
+          :to="'/register'"
           data-ma-action="nk-login-switch"
-          data-ma-block="#l-forget-password"
-          ><i>?</i> <span>Forgot Password</span></a
+          data-ma-block="#l-register"
         >
+          <i class="notika-icon notika-plus-symbol"></i>
+          <span>Register</span>
+        </router-link>
       </div>
     </div>
   </div>

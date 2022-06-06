@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ideas', function (Blueprint $table) {
+        Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tournament_id')->nullable()->constrained();
             $table->string('name');
-            $table->string('email');
-            $table->text('idea');
+            $table->enum('status', [
+                'in progress',
+                'waiting',
+                'completed'
+            ])->default('waiting');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ideas');
+        Schema::dropIfExists('tournaments');
     }
 };
