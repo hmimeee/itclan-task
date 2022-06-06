@@ -14,7 +14,11 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        //
+        $ideas = Idea::latest()
+            ->limit(10)
+            ->get();
+
+        return $this->apiResponse(null, 200, $ideas);
     }
 
     /**
