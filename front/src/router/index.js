@@ -10,7 +10,12 @@ const routes = [
       {
         path: "dashboard",
         name: "dashboard",
-        component: () => import("../components/Dashboard.vue"),
+        component: () => import("../components/Dashboard.vue")
+      },
+      {
+        path: "tournament/:tournamentId",
+        name: "tournament",
+        component: () => import("../components/Tournament.vue"),
       },
     ],
   },
@@ -44,7 +49,7 @@ router.beforeEach((to, from, next) => {
   let isAuthenticated = localStorage.getItem("_token");
   if (!["login", "register"].includes(to.name) && !isAuthenticated)
     next({ name: "login" });
-  
+
   next();
 
   return false;

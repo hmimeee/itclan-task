@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\Idea;
 use App\Models\Tournament;
+use App\Notifications\PhaseWinningNotification;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
 
 class GenerateTournamentWinners extends Command
 {
@@ -38,17 +40,18 @@ class GenerateTournamentWinners extends Command
 
         if (!$firstPhase) :
             $selected = $tournament->ideas()
+                ->with('user')
                 ->inRandomOrder()
                 ->limit(4)
-                ->get()
-                ->map(fn ($d) => [
+                ->get();
+
+            Notification::send($selected->pluck('user'), new PhaseWinningNotification('first', $tournament));
+
+            $tournament->tournamentWinners()
+                ->createMany($selected->map(fn ($d) => [
                     'idea_id' => $d->id,
                     'phase' => 'first'
-                ]);
-
-            $tournament->tournamentWinners()->createMany($selected);
-
-            info('Tournament winners of first: ' . $selected);
+                ]));
 
             return true;
         endif;
@@ -65,7 +68,13 @@ class GenerateTournamentWinners extends Command
                     'phase' => 'second'
                 ]);
 
-            info('Tournament winners of second: ' . $selected);
+            $winners = $tournament->winners()
+                ->with('user')
+                ->whereHas('status', fn ($q) => $q->where('phase', 'second'))
+                ->get()
+                ->pluck('user');
+
+            Notification::send($winners, new PhaseWinningNotification('second', $tournament));
 
             return true;
         endif;
@@ -83,7 +92,17 @@ class GenerateTournamentWinners extends Command
                     'phase' => 'final'
                 ]);
 
-            info('Tournament winners of final: ' . $selected);
+            $tournament->update([
+                'status' => 'completed'
+            ]);
+
+            $winners = $tournament->winners()
+                ->with('user')
+                ->whereHas('status', fn ($q) => $q->where('phase', 'final'))
+                ->get()
+                ->pluck('user');
+
+            Notification::send($winners, new PhaseWinningNotification('final', $tournament));
 
             return true;
         endif;

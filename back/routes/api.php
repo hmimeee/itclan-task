@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('ideas', IdeaController::class)->only('index', 'store');
 
-    Route::get('tournaments', [TournamentController::class, 'index']);
+    Route::apiResource('tournaments', TournamentController::class);
 });
 
 Route::post('login', [AuthController::class, 'login']);

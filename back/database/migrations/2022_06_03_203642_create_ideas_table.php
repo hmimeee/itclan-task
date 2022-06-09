@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ideas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->foreignId('tournament_id')->nullable()->constrained();
             $table->string('name');
             $table->string('email');

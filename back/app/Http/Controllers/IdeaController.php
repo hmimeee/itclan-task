@@ -14,7 +14,8 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        $ideas = Idea::latest()
+        $ideas = Idea::with('status', 'user')
+            ->latest()
             ->limit(10)
             ->get();
 
@@ -45,7 +46,10 @@ class IdeaController extends Controller
             'idea' => 'required|string',
         ]);
 
-        Idea::create($request->only('name', 'email', 'idea'));
+        auth()
+            ->user()
+            ->ideas()
+            ->create($request->only('name', 'email', 'idea'));
 
         return $this->apiResponse('Idea created successfully');
     }

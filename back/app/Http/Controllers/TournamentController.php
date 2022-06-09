@@ -50,7 +50,9 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament)
     {
-        //
+        $tournament->load('ideas.user', 'ideas.status');
+
+        return $this->apiResponse(null, 200, $tournament);
     }
 
     /**

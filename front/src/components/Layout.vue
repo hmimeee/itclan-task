@@ -40,7 +40,7 @@
               <nav id="dropdown">
                 <ul class="mobile-menu-nav">
                   <li>
-                    <a href="#">Home</a>
+                    <router-link to="/dashboard">Home</router-link>
                   </li>
                 </ul>
               </nav>
@@ -57,8 +57,8 @@
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <ul class="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
               <li class="active">
-                <a href="#Home"
-                  ><i class="notika-icon notika-house"></i> Home</a
+                <router-link to="/dashboard"
+                  ><i class="notika-icon notika-house"></i> Home</router-link
                 >
               </li>
             </ul>
@@ -78,11 +78,11 @@
 import { computed, onMounted } from "@vue/runtime-core";
 import useAuthentication from "../composable/auth";
 import { useRouter } from "vue-router";
-import { useStore } from 'vuex';
+import { useStore } from "vuex";
 
 export default {
   setup() {
-  const vuexStore = useStore();
+    const vuexStore = useStore();
     const router = useRouter();
     const { logout } = useAuthentication();
 
@@ -95,7 +95,7 @@ export default {
     });
 
     return {
-      logout
+      logout,
     };
   },
 };

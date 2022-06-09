@@ -35,10 +35,10 @@ class GenerateTournament extends Command
 
         $lastTournament = Tournament::latest()->first();
         if (!$lastTournament) :
-            $name = 'Tournament ' . str_pad(1, 5, STR_PAD_LEFT);
+            $name = 'Tournament #' . str_pad(1, 5, STR_PAD_LEFT);
         else :
             $explodes = explode(' ', $lastTournament->name);
-            $name = 'Tournament ' . str_pad(intval($explodes[1]) + 1, 5, STR_PAD_LEFT);
+            $name = 'Tournament #' . str_pad(intval($explodes[1]) + 1, 5, STR_PAD_LEFT);
         endif;
 
         $tournament = Tournament::create([

@@ -16,6 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('tournament:generate')->everyFiveMinutes();
+        $schedule->command('tournament:start')->everyFiveMinutes();
+        $schedule->command('tournament:generate-winners')->everyFiveMinutes();
+        $schedule->command('queue:restart')->everyMinute();
+        $schedule->command('queue:work')->everyMinute();
     }
 
     /**
@@ -25,7 +30,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

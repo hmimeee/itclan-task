@@ -29,4 +29,14 @@ class TournamentWinner extends Model
     {
         return $query->where('phase', 'second');
     }
+
+    /**
+     * Get the idea that owns the TournamentWinner
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function idea()
+    {
+        return $this->belongsTo(Idea::class);
+    }
 }

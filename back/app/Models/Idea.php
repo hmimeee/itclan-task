@@ -10,6 +10,7 @@ class Idea extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'tournament_id',
         'name',
         'email',
@@ -29,5 +30,25 @@ class Idea extends Model
     public function scopeWaiting($query)
     {
         return $query->whereNull('tournament_id');
+    }
+
+    /**
+     * Get the user that owns the Idea
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the status associated with the Idea
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function status()
+    {
+        return $this->hasOne(TournamentWinner::class)->latest();
     }
 }

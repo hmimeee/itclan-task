@@ -70,15 +70,17 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>User</th>
                     <th>Idea</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="idea in ideas" v-bind:key="idea.id">
                     <td class="f-500 c-cyan">{{ idea.id }}</td>
-                    <td>{{ idea.name }}</td>
+                    <td>{{ idea.user.name }}</td>
                     <td>{{ idea.idea }}</td>
+                    <td>{{ idea.status?.phase ?? "--" }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -100,14 +102,22 @@
                   <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th style="width: 60px">Price</th>
+                    <th style="width: 60px">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="tournament in tournaments" v-bind:key="tournament.id">
-                    <td class="f-500 c-cyan">{{tournament.id}}</td>
-                    <td>{{tournament.name}}</td>
-                    <td class="f-500 c-cyan">{{tournament.status}}</td>
+                  <tr
+                    v-for="tournament in tournaments"
+                    v-bind:key="tournament.id"
+                  >
+                    <td class="f-500 c-cyan">{{ tournament.id }}</td>
+                    <td>
+                      <a href="javascript:;" @click="viewTournament(tournament.id)"
+                        >
+                        {{ tournament.name }}
+                      </a>
+                    </td>
+                    <td class="f-500 c-cyan">{{ tournament.status }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -124,9 +134,11 @@ import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import useIdeas from "@/composable/ideas";
 import useTournaments from "../composable/tournament";
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
+    const router = useRouter();
     const vuexStore = useStore();
     const user = computed(() => vuexStore.getters["auth/user"]);
     const ideas = computed(() => vuexStore.getters["idea/ideas"]);
@@ -143,6 +155,10 @@ export default {
       await getIdeas();
     };
 
+    const viewTournament = (id) => {
+      router.push(`/tournament/${id}`);
+    };
+
     onMounted(async () => {
       await getIdeas();
       await getTournaments();
@@ -153,7 +169,8 @@ export default {
       ideaData,
       submitIdea,
       ideas,
-      tournaments
+      tournaments,
+      viewTournament,
     };
   },
 };
